@@ -20,21 +20,25 @@ const scrapeInfiniteScroll = async (url:string, numScrolls:number):Promise<objec
 	for (let i:number = 0; i<numScrolls; i++){
 		await scrollDown();
 	};
-	
-	const scrapedData:object[] = await page.evaluate(()=> {
-		const items = document.querySelectorAll('div[id^="t3_"]:not([id$="share-menu"]):not([id*="="])');
+	try {
+		const scrapedData:object[] = await page.evaluate(()=> {
+			const items = document.querySelectorAll('div[id^="t3_"]:not([id$="share-menu"]):not([id*="="])');
 
-		const data:object[] = [];
-		items.forEach(item => {
-			scrapedData.push(
-					item.innerText
-			);
-		});
+			const data:object[] = [];
+			items.forEach(item => {
+				data.push(
+						item.innerText
+				);
+			});
+			return data;
+		})
+
+		await browser.close();
 		return scrapedData;
-	})
-
-	await browser.close();
-	return scrapedData;
+	} catch (err) {
+		browser.close();
+		console.error(err);
+	}
 };
 
 const writeDataToFile = async (data:object[]) => {
