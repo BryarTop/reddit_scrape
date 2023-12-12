@@ -26,14 +26,11 @@ const scrapeInfiniteScroll = async (url:string, numScrolls:number):Promise<objec
 
 		const data:object[] = [];
 		items.forEach(item => {
-			data.push(
-				{
-					'subreddit':url,
-					'postTitle':item.innerText
-				}
+			scrapedData.push(
+					item.innerText
 			);
 		});
-		return data;
+		return scrapedData;
 	})
 
 	await browser.close();
