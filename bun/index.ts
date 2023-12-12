@@ -50,15 +50,17 @@ const writeDataToFile = async (data:object[]) => {
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+//invoking the scrape
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 const subreddits:string[] = ['WorkReform','jobs','antiwork','wfh','managers'];
 
 for(let subR of subreddits){
 	try {
-		await scrapeInfiniteScroll(subR,5).then((data)=>{
+		await scrapeInfiniteScroll(subR,10).then((data)=>{
 			writeDataToFile(data);
 		})
 	} catch (err) {
 		console.error(err);
-	}
+	};
 };
