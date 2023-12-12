@@ -53,6 +53,7 @@ const writeDataToFile = async (data:object[]) => {
 //invoking the scrape
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
+
 const subreddits:string[] = ['WorkReform','jobs','antiwork','wfh','managers'];
 
 for(let subR of subreddits){
