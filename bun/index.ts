@@ -11,7 +11,7 @@ const scrapeInfiniteScroll = async (url:string, numScrolls:number):Promise<strin
 	
 	async function scrollDown(){
 		await page.evaluate(() => {
-			window.scrollto(0,document.body.scrollHeight);
+			window.scrollTo(0,document.body.scrollHeight);
 		});
 		await page.waitForTimeout(1000);
 	}
@@ -34,4 +34,4 @@ const scrapeInfiniteScroll = async (url:string, numScrolls:number):Promise<strin
 	return scrapedData;
 };
 
-scrapeInfiniteScroll('https://www.reddit.com/r/WorkReform/',5);
+console.log(scrapeInfiniteScroll('https://www.reddit.com/r/WorkReform/',5));
