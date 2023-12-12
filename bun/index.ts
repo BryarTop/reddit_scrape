@@ -1,14 +1,15 @@
 import puppeteer from "puppeteer";
+import fs from 'fs';
 
-const scrapeInfiniteScroll = async (url:string, numScrolls:number):Promise<string[]> => {
+const scrapeInfiniteScroll = async (url:string, numScrolls:number):Promise<object[]> => {
 	const browser = await puppeteer.launch({
 		headless:"new",
 		// executablePath:'/Applications/Google Chrome.app'
 	});
 	const page = await browser.newPage()
 
-	await page.goto(url);
-	
+	await page.goto(`https://www.reddit.com/r/${url}/top/?t=year`);
+
 	async function scrollDown(){
 		await page.evaluate(() => {
 			window.scrollTo(0,document.body.scrollHeight);
@@ -20,12 +21,17 @@ const scrapeInfiniteScroll = async (url:string, numScrolls:number):Promise<strin
 		await scrollDown();
 	};
 	
-	const scrapedData:string[] = await page.evaluate(()=> {
+	const scrapedData:object[] = await page.evaluate(()=> {
 		const items = document.querySelectorAll('div[id^="t3_"]:not([id$="share-menu"]):not([id*="="])');
 
-		const data:string[] = [];
+		const data:object[] = [];
 		items.forEach(item => {
-			data.push(item.innerText);
+			data.push(
+				{
+					'subreddit':url,
+					'postTitle':item.innerText
+				}
+			);
 		});
 		return data;
 	})
@@ -34,10 +40,25 @@ const scrapeInfiniteScroll = async (url:string, numScrolls:number):Promise<strin
 	return scrapedData;
 };
 
-try {
-	await scrapeInfiniteScroll('https://reddit.com/r/WorkReform',5).then((data)=>{
-		console.log(data.length);
-	})
-} catch (err) {
-	console.error(err);
-}
+const writeDataToFile = async (data:object[]) => {
+	 fs.appendFile('./output.txt', data.join('\n'),"utf-8",(err)=>{
+										 if(err){
+												console.error(err);
+										 } else {
+												console.log('Data has been successfully appended');
+										 }});
+};
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
+const subreddits:string[] = ['WorkReform','jobs','antiwork','wfh','managers'];
+
+for(let subR of subreddits){
+	try {
+		await scrapeInfiniteScroll(subR,5).then((data)=>{
+			writeDataToFile(data);
+		})
+	} catch (err) {
+		console.error(err);
+	}
+};
