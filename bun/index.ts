@@ -35,8 +35,8 @@ const scrapeInfiniteScroll = async (url:string, numScrolls:number):Promise<strin
 };
 
 try {
-	await scrapeInfiniteScroll('https://reddit.com/WorkReform',5).then((data)=>{
-		console.log(data);
+	await scrapeInfiniteScroll('https://reddit.com/r/WorkReform',5).then((data)=>{
+		console.log(data.length);
 	})
 } catch (err) {
 	console.error(err);
