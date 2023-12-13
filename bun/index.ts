@@ -27,7 +27,10 @@ const scrapeInfiniteScroll = async (url:string, numScrolls:number):Promise<objec
 			const data:object[] = [];
 			items.forEach(item => {
 				data.push(
-						item.innerText
+					{ 
+						'postTitle':item.getElementsByTagName('h3')[0].innerText,
+						'body':item.innerText
+					}
 				);
 			});
 			return data;
